@@ -1,0 +1,91 @@
+///// 使用each跟$產出margin跟padding設定
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: (
+    $spacer * 0.25
+  ),
+  2: (
+    $spacer * 0.5
+  ),
+  3: (
+    $spacer * 0.75
+  ),
+  4: $spacer,
+  5: (
+    $spacer * 1.25
+  ),
+  6: (
+    $spacer * 1.5
+  ),
+  7: (
+    $spacer * 1.75
+  ),
+  8: (
+    $spacer * 2
+  )
+);
+
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $num, $val in $spacers {
+    .#{$abbrev}-#{$num} {
+      #{$prop}: $val;
+    }
+    .#{$abbrev}t-#{$num} {
+      #{$prop}-top: $val;
+    }
+    .#{$abbrev}r-#{$num} {
+      #{$prop}-right: $val;
+    }
+    .#{$abbrev}b-#{$num} {
+      #{$prop}-bottom: $val;
+    }
+    .#{$abbrev}l-#{$num} {
+      #{$prop}-left: $val;
+    }
+    .#{$abbrev}x-#{$num} {
+      #{$prop}-left: $val;
+      #{$prop}-right: $val;
+    }
+    .#{$abbrev}y-#{$num} {
+      #{$prop}-top: $val;
+      #{$prop}-bottom: $val;
+    }
+  }
+}
+
+///// end
+
+html {
+  background-color: black;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+.d-none {
+  display: none;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-column{
+  flex-direction: column;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.justify-content-end {
+  justify-content: end;
+}
+
+.align-items-center {
+  align-items: center;
+}

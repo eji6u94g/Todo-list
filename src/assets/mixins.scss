@@ -1,0 +1,32 @@
+@mixin navbar-style{
+  width: 15vw;
+  min-width: 250px;
+  background-color: #242426;
+  color: white;
+}
+
+@mixin common-button {
+  border: 0;
+  background-color: none;
+  background: none;
+  outline: none;
+  color: white;
+  text-align: start;
+  padding: 0.5rem 0.5rem;
+  svg {
+    padding-right: 1rem;
+  }
+}
+
+@mixin hover-effect {
+  border-radius: 6px;
+  background-color: #343436;
+}
+
+@mixin split-line {
+  display: block;
+  height: 1px;
+  width: 95%;
+  background-color: #313033;
+  margin: 0.25rem 2.5%;
+}

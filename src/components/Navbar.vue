@@ -5,13 +5,13 @@
       <span>user-name</span>
     </div>
 
-    <div class="query-by-keyword">
+    <div class="query-by-keyword d-flex align-items-center">
       <input type="search" placeholder="搜尋" results />
       <i class="fa-solid fa-magnifying-glass"></i>
     </div>
 
-    <div class="query-by-options">
-      <button><i class="fa-solid fa-sun"></i>我的今天</button>
+    <div class="query-by-options d-flex flex-column">
+      <button><i class="fa-solid fa-sun"></i>我的一天</button>
       <button><i class="fa-solid fa-star"></i>重要</button>
       <button><i class="fa-solid fa-calendar"></i>已計劃</button>
       <button><i class="fa-solid fa-house"></i>全部</button>
@@ -19,7 +19,7 @@
 
     <span class="split-line"></span>
 
-    <div class="query-by-type">
+    <div class="query-by-type d-flex flex-column">
       <button><i class="fa-solid fa-bars"></i>分類1</button>
     </div>
   </nav>
@@ -31,18 +31,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@mixin hover-effect {
-  border-radius: 6px;
-  background-color: #343436;
-}
+<style lang="scss" scoped>
+@import "../assets/mixins.scss";
+
 nav {
-  width: 15vw;
-  min-width: 250px;
-  background-color: #242426;
-  color: white;
-  // padding-left: 1rem;
-  // padding-right: 1rem;
+  @include navbar-style();
 }
 div.user-name {
   padding: 0.75rem 1rem;
@@ -51,8 +44,6 @@ div.query-by-keyword {
   margin: 0;
   padding-left: 1rem;
   padding-right: 1rem;
-  display: flex;
-  align-items: center;
   input {
     outline: none;
     border-radius: 6px;
@@ -85,30 +76,15 @@ div.query-by-keyword {
 }
 div.query-by-options,
 div.query-by-type {
-  display: flex;
-  flex-direction: column;
   margin: 0.5rem 0.5rem;
 }
 button {
-  border: 0;
-  background-color: none;
-  background: none;
-  outline: none;
-  color: white;
-  text-align: start;
-  padding: 0.5rem 0.5rem;
-  svg {
-    padding-right: 1rem;
-  }
+  @include common-button();
   &:hover {
     @include hover-effect();
   }
 }
 span.split-line {
-  display: block;
-  height: 1px;
-  width: 95%;
-  background-color: #313033;
-  margin: 0.25rem 0;
+  @include split-line();
 }
 </style>
