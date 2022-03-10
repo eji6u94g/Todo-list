@@ -1,8 +1,8 @@
 <template>
-  <div class="modal-container">
+  <div :class="['modal-container', { 'd-none': !props.isModalShow }]">
     <h3>modal</h3>
 
-    <TodoItem />
+    <TodoItem/>
 
     <span class="split-line"></span>
 
@@ -30,6 +30,15 @@ export default {
   name: "Modal",
   components: {
     TodoItem,
+  },
+  props: {
+    isModalShow: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  setup(props) {
+    return { props };
   },
 };
 </script>

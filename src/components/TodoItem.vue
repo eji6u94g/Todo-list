@@ -1,5 +1,8 @@
 <template>
-  <div class="to-do-item d-flex align-items-center justify-content-between">
+  <div
+    class="to-do-item d-flex align-items-center justify-content-between"
+    @click="handleToDoItemClicked"
+  >
     <div>
       <input type="checkbox" class="toggle" id="1" />
       <label for="1"></label>
@@ -12,6 +15,13 @@
 <script>
 export default {
   name: "TodoItem",
+  emits: ["handleToDoItemClicked"],
+  setup(props, { emit }) {
+    const handleToDoItemClicked = () => {
+      emit("handleToDoItemClicked");
+    };
+    return { handleToDoItemClicked };
+  },
 };
 </script>
 
