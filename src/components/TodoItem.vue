@@ -1,26 +1,64 @@
 <template>
-  <div
-    class="to-do-item d-flex align-items-center justify-content-between"
-    @click="handleToDoItemClicked"
-  >
-    <div>
-      <input type="checkbox" class="toggle" id="1" />
-      <label for="1"></label>
-      <span>to-do-item-name</span>
+  <div class="to-do-item d-flex align-items-center justify-content-between">
+    <div class="item">
+      <input
+        type="checkbox"
+        class="toggle"
+        :id="props.todoItem.id"
+        v-model="isFinished"
+      />
+      <label :for="props.todoItem.id" @click="toggleIsFinished"></label>
+      <p :id="props.todoItem.id">{{ props.todoItem.title }}</p>
     </div>
-    <i class="fa-regular fa-star"></i>
+
+    <div v-if="isImportant" @click="toggleIsImportant" class="important-icon">
+      <i class="fa-solid fa-star"></i>
+    </div>
+    <div v-else @click="toggleIsImportant" class="important-icon">
+      <i class="fa-regular fa-star"></i>
+    </div>
   </div>
 </template>
 
 <script>
+import todoAPI from "../apis/todo-items";
+import { ref } from "vue";
+
 export default {
   name: "TodoItem",
-  emits: ["handleToDoItemClicked"],
-  setup(props, { emit }) {
-    const handleToDoItemClicked = () => {
-      emit("handleToDoItemClicked");
+  props: {
+    todoItem: {
+      value: Object,
+      required: true,
+    },
+  },
+  setup(props) {
+    const isFinished = ref(props.todoItem.isFinished);
+    const isImportant = ref(props.todoItem.isImportant);
+    const test = ref(1);
+
+    const toggleIsFinished = async () => {
+      const payLoad = { isFinished: !isFinished.value };
+      const res = await todoAPI.patchTodo({ id: props.todoItem.id, payLoad });
     };
-    return { handleToDoItemClicked };
+
+    const toggleIsImportant = async () => {
+      const payLoad = { isImportant: !isImportant.value };
+      const res = await todoAPI.patchTodo({ id: props.todoItem.id, payLoad });
+      console.log(isImportant.value);
+      isImportant.value = res.data.isImportant;
+      test.value += 1;
+      console.log(isImportant.value);
+    };
+
+    return {
+      props,
+      isFinished,
+      isImportant,
+      toggleIsFinished,
+      toggleIsImportant,
+      test,
+    };
   },
 };
 </script>
@@ -36,7 +74,16 @@ export default {
   border-radius: 0.5rem;
   margin-top: 0.3rem;
   div {
-    position: relative;
+    &.item {
+      position: relative;
+      flex-grow: 1;
+    }
+    &.important-icon {
+      height: 40px;
+      width: 40px;
+      text-align: center;
+      padding-top: 1rem;
+    }
   }
   input {
     text-align: center;
@@ -68,8 +115,11 @@ export default {
   .toggle:checked + label {
     background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%2359A193%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20fill%3D%22%233EA390%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22%2F%3E%3C%2Fsvg%3E");
   }
-  span {
+  p {
     padding-left: 3.5rem;
+    height: 40px;
+    margin: 0 0;
+    padding-top: 1rem;
   }
   svg:hover {
     filter: invert(0.3);

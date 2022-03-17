@@ -1,9 +1,7 @@
 <template>
   <div :class="['modal-container', { 'd-none': !props.isModalShow }]">
     <h3>modal</h3>
-
-    <TodoItem/>
-
+    <TodoItem :todoItem="todoItem"/>
     <span class="split-line"></span>
 
     <div class="d-flex flex-column mb-4 mt-4">
@@ -24,21 +22,36 @@
 </template>
 
 <script>
-import TodoItem from "./TodoItem";
+import { reactive, watch, ref } from "@vue/runtime-core";
+import todoAPI from "../apis/todo-items";
+import TodoItem from "./TodoItem.vue";
 
 export default {
   name: "Modal",
-  components: {
-    TodoItem,
-  },
+  components:{TodoItem},
   props: {
     isModalShow: {
       type: Boolean,
       required: true,
     },
+    ItemIdOfModal: {
+      type: String,
+      default: "",
+    },
   },
   setup(props) {
-    return { props };
+    let id = ref(props.ItemIdOfModal);
+    let todoItem = reactive({});
+
+    watch(
+      () => props.ItemIdOfModal,
+      async (newValue, oldValue) => {
+        const res = await todoAPI.getTodo({ id: newValue });
+        Object.assign(todoItem, res.data);
+      }
+    );
+
+    return { props, todoItem };
   },
 };
 </script>

@@ -1,3 +1,24 @@
 {
-  
+  "todoList": [
+    {
+      "id": "1",
+      "title": "買電動牙刷",
+      "isFinished": true,
+      "isAddedToToday": true,
+      "isImportant": false,
+      "isHavingDueDate": false,
+      "category": "雜項",
+      "dueDate": null
+    },
+    {
+      "id": "2",
+      "title": "買衛生紙",
+      "isFinished": false,
+      "isAddedToToday": true,
+      "isImportant": false,
+      "isHavingDueDate": false,
+      "category": "雜項",
+      "dueDate": null
+    }
+  ]
 }

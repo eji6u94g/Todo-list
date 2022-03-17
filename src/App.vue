@@ -2,11 +2,17 @@
   <div class="container">
     <Navbar />
 
-    <TodoItemsContainer
-      @afterToDoItemClicked="afterToDoItemClicked"
-    />
+    <Suspense>
+      <template #default>
+        <TodoItemsContainer @afterToDoItemClicked="afterToDoItemClicked" />
+      </template>
 
-    <Modal :isModalShow="isModalShow" />
+      <template #fallback>
+        <p>Loading...</p>
+      </template>
+    </Suspense>
+
+    <Modal :isModalShow="isModalShow" :ItemIdOfModal="ItemIdOfModal" />
   </div>
 </template>
 
@@ -21,12 +27,14 @@ export default {
   components: { Navbar, Modal, TodoItemsContainer },
   setup() {
     let isModalShow = ref(false);
+    let ItemIdOfModal = ref("");
 
-    const afterToDoItemClicked = () => {
+    const afterToDoItemClicked = (id) => {
       isModalShow.value = !isModalShow.value;
+      ItemIdOfModal.value = id;
     };
 
-    return { isModalShow, afterToDoItemClicked };
+    return { isModalShow, afterToDoItemClicked, ItemIdOfModal };
   },
 };
 </script>
