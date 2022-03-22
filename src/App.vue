@@ -12,7 +12,14 @@
       </template>
     </Suspense>
 
-    <Modal :isModalShow="isModalShow" :ItemIdOfModal="ItemIdOfModal" />
+    <Suspense>
+      <template #default>
+        <Modal :isModalShow="isModalShow" :ItemIdOfModal="ItemIdOfModal" />
+      </template>
+      <template #fallback>
+        <p>Loading...</p>
+      </template>
+    </Suspense>
   </div>
 </template>
 
@@ -26,15 +33,19 @@ export default {
   name: "App",
   components: { Navbar, Modal, TodoItemsContainer },
   setup() {
-    let isModalShow = ref(false);
-    let ItemIdOfModal = ref("");
+    const isModalShow = ref(false);
+    const ItemIdOfModal = ref("");
 
     const afterToDoItemClicked = (id) => {
       isModalShow.value = !isModalShow.value;
       ItemIdOfModal.value = id;
     };
 
-    return { isModalShow, afterToDoItemClicked, ItemIdOfModal };
+    return {
+      isModalShow,
+      afterToDoItemClicked,
+      ItemIdOfModal,
+    };
   },
 };
 </script>

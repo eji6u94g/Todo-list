@@ -7,14 +7,26 @@
         :id="props.todoItem.id"
         v-model="isFinished"
       />
-      <label :for="props.todoItem.id" @click="toggleIsFinished"></label>
+      <label
+        :for="props.todoItem.id"
+        @click="toggleState('isFinished', isFinished)"
+      ></label>
       <p :id="props.todoItem.id">{{ props.todoItem.title }}</p>
     </div>
 
-    <div v-if="isImportant" @click="toggleIsImportant" class="important-icon">
+    <div
+      v-if="isImportant"
+      @click="toggleState('isImportant', isImportant)"
+      class="important-icon"
+    >
       <i class="fa-solid fa-star"></i>
     </div>
-    <div v-else @click="toggleIsImportant" class="important-icon">
+
+    <div
+      v-else
+      @click="toggleState('isImportant', isImportant)"
+      class="important-icon"
+    >
       <i class="fa-regular fa-star"></i>
     </div>
   </div>
@@ -22,7 +34,7 @@
 
 <script>
 import todoAPI from "../apis/todo-items";
-import { ref } from "vue";
+import { watch, ref } from "vue";
 
 export default {
   name: "TodoItem",
@@ -35,29 +47,33 @@ export default {
   setup(props) {
     const isFinished = ref(props.todoItem.isFinished);
     const isImportant = ref(props.todoItem.isImportant);
-    const test = ref(1);
 
-    const toggleIsFinished = async () => {
-      const payLoad = { isFinished: !isFinished.value };
-      const res = await todoAPI.patchTodo({ id: props.todoItem.id, payLoad });
+    const toggleState = async (string, state) => {
+      const payLoad = { [string]: !state };
+      const { data } = await todoAPI.patchTodo({
+        id: props.todoItem.id,
+        payLoad,
+      });
+      if (string === "isFinished") {
+        isFinished.value = data[string];
+      } else {
+        isImportant.value = data[string];
+      }
     };
 
-    const toggleIsImportant = async () => {
-      const payLoad = { isImportant: !isImportant.value };
-      const res = await todoAPI.patchTodo({ id: props.todoItem.id, payLoad });
-      console.log(isImportant.value);
-      isImportant.value = res.data.isImportant;
-      test.value += 1;
-      console.log(isImportant.value);
-    };
+    watch(
+      () => props.todoItem,
+      (newValue, oldValue) => {
+        isFinished.value = newValue.isFinished;
+        isImportant.value = newValue.isImportant;
+      }
+    );
 
     return {
       props,
       isFinished,
       isImportant,
-      toggleIsFinished,
-      toggleIsImportant,
-      test,
+      toggleState,
     };
   },
 };

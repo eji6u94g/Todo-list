@@ -1,7 +1,7 @@
 <template>
   <div :class="['modal-container', { 'd-none': !props.isModalShow }]">
-    <h3>modal</h3>
-    <TodoItem :todoItem="todoItem"/>
+    <TodoItem :todoItem="todoItem" />
+
     <span class="split-line"></span>
 
     <div class="d-flex flex-column mb-4 mt-4">
@@ -22,13 +22,13 @@
 </template>
 
 <script>
-import { reactive, watch, ref } from "@vue/runtime-core";
+import { watch, ref } from "vue";
 import todoAPI from "../apis/todo-items";
 import TodoItem from "./TodoItem.vue";
 
 export default {
   name: "Modal",
-  components:{TodoItem},
+  components: { TodoItem },
   props: {
     isModalShow: {
       type: Boolean,
@@ -36,18 +36,29 @@ export default {
     },
     ItemIdOfModal: {
       type: String,
-      default: "",
+      required: true,
     },
   },
   setup(props) {
-    let id = ref(props.ItemIdOfModal);
-    let todoItem = reactive({});
+    const todoItem = ref({});
 
     watch(
-      () => props.ItemIdOfModal,
-      async (newValue, oldValue) => {
-        const res = await todoAPI.getTodo({ id: newValue });
-        Object.assign(todoItem, res.data);
+      () => [props.ItemIdOfModal, props.isModalShow],
+      async (
+        [newValueItemIdOfModal, newValueisModalShow],
+        [oldValueItemIdOfModal, oldValueisModalShow]
+      ) => {
+        try {
+          const { data, statusText } = await todoAPI.getTodo({ id: newValueItemIdOfModal });
+
+          if (statusText !== "OK") {
+            throw new Error(statusText);
+          }
+
+          todoItem.value = data;
+        } catch (error) {
+          console.log(error);
+        }
       }
     );
 

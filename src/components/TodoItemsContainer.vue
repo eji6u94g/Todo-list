@@ -3,11 +3,9 @@
     <h1>To do List</h1>
 
     <main>
-      <h2>to-do-items-title</h2>
-
       <div @click="handleToDoItemClickedOnContainer" class="to-do-items">
         <TodoItem
-          v-for="todoItem in todoItems.value"
+          v-for="todoItem in todoItems"
           :key="todoItem.id"
           :todoItem="todoItem"
         />
@@ -16,10 +14,8 @@
   </div>
 </template>
 
-
-
 <script>
-import { onMounted, reactive, ref } from "vue";
+import { ref } from "vue";
 import TodoItem from "./TodoItem";
 import todoAPI from "../apis/todo-items";
 
@@ -27,33 +23,31 @@ export default {
   name: "TodoItemsContainer",
   components: { TodoItem },
   emits: ["afterToDoItemClicked"],
-  setup(props, { emit }) {
+  async setup(props, { emit }) {
     const handleToDoItemClickedOnContainer = (e) => {
       if (e.target.tagName === "P") {
         emit("afterToDoItemClicked", e.target.id);
       }
     };
 
-    let todoItems = reactive({ value: null });
-    let isLoading = ref(true);
+    const todoItems = ref({});
+    const isLoading = ref(true);
 
-    onMounted(async () => {
-      try {
-        const { data, statusText } = await todoAPI.getTodos();
+    try {
+      const { data, statusText } = await todoAPI.getTodos();
 
-        if (statusText !== "OK") {
-          throw new Error(statusText);
-        }
-
-        todoItems.value = data;
-        isLoading.value = false;
-      } catch (error) {
-        isLoading.value = true;
-        console.log(error);
+      if (statusText !== "OK") {
+        throw new Error(statusText);
       }
-    });
 
-    return { handleToDoItemClickedOnContainer, todoItems, isLoading };
+      todoItems.value = data;
+      isLoading.value = false;
+    } catch (error) {
+      isLoading.value = true;
+      console.log(error);
+    }
+
+    return { props, handleToDoItemClickedOnContainer, todoItems, isLoading };
   },
 };
 </script>

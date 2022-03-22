@@ -8,17 +8,19 @@
       "isImportant": false,
       "isHavingDueDate": false,
       "category": "雜項",
-      "dueDate": null
+      "dueDate": null,
+      "string": true
     },
     {
       "id": "2",
       "title": "買衛生紙",
-      "isFinished": false,
+      "isFinished": true,
       "isAddedToToday": true,
       "isImportant": false,
       "isHavingDueDate": false,
       "category": "雜項",
-      "dueDate": null
+      "dueDate": null,
+      "string": false
     }
   ]
 }
