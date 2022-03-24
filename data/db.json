@@ -9,14 +9,15 @@
       "isHavingDueDate": false,
       "category": "雜項",
       "dueDate": null,
-      "string": true
+      "string": true,
+      "undefined": true
     },
     {
       "id": "2",
       "title": "買衛生紙",
       "isFinished": true,
       "isAddedToToday": true,
-      "isImportant": false,
+      "isImportant": true,
       "isHavingDueDate": false,
       "category": "雜項",
       "dueDate": null,

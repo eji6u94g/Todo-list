@@ -1,6 +1,6 @@
 <template>
   <div :class="['modal-container', { 'd-none': !props.isModalShow }]">
-    <TodoItem :todoItem="todoItem" />
+    <TodoItem :todoItem="$store.state.focusedTodoItem" />
 
     <span class="split-line"></span>
 
@@ -22,8 +22,6 @@
 </template>
 
 <script>
-import { watch, ref } from "vue";
-import todoAPI from "../apis/todo-items";
 import TodoItem from "./TodoItem.vue";
 
 export default {
@@ -34,35 +32,9 @@ export default {
       type: Boolean,
       required: true,
     },
-    ItemIdOfModal: {
-      type: String,
-      required: true,
-    },
   },
   setup(props) {
-    const todoItem = ref({});
-
-    watch(
-      () => [props.ItemIdOfModal, props.isModalShow],
-      async (
-        [newValueItemIdOfModal, newValueisModalShow],
-        [oldValueItemIdOfModal, oldValueisModalShow]
-      ) => {
-        try {
-          const { data, statusText } = await todoAPI.getTodo({ id: newValueItemIdOfModal });
-
-          if (statusText !== "OK") {
-            throw new Error(statusText);
-          }
-
-          todoItem.value = data;
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    );
-
-    return { props, todoItem };
+    return { props };
   },
 };
 </script>

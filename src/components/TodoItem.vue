@@ -5,18 +5,30 @@
         type="checkbox"
         class="toggle"
         :id="props.todoItem.id"
-        v-model="isFinished"
+        v-model="props.todoItem.isFinished"
       />
       <label
         :for="props.todoItem.id"
-        @click="toggleState('isFinished', isFinished)"
+        @click="
+          toggleState(
+            props.todoItem.id,
+            'isFinished',
+            props.todoItem.isFinished
+          )
+        "
       ></label>
       <p :id="props.todoItem.id">{{ props.todoItem.title }}</p>
     </div>
 
     <div
-      v-if="isImportant"
-      @click="toggleState('isImportant', isImportant)"
+      v-if="props.todoItem.isImportant"
+      @click="
+        toggleState(
+          props.todoItem.id,
+          'isImportant',
+          props.todoItem.isImportant
+        )
+      "
       class="important-icon"
     >
       <i class="fa-solid fa-star"></i>
@@ -24,7 +36,13 @@
 
     <div
       v-else
-      @click="toggleState('isImportant', isImportant)"
+      @click="
+        toggleState(
+          props.todoItem.id,
+          'isImportant',
+          props.todoItem.isImportant
+        )
+      "
       class="important-icon"
     >
       <i class="fa-regular fa-star"></i>
@@ -33,8 +51,7 @@
 </template>
 
 <script>
-import todoAPI from "../apis/todo-items";
-import { watch, ref } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "TodoItem",
@@ -45,34 +62,13 @@ export default {
     },
   },
   setup(props) {
-    const isFinished = ref(props.todoItem.isFinished);
-    const isImportant = ref(props.todoItem.isImportant);
-
-    const toggleState = async (string, state) => {
-      const payLoad = { [string]: !state };
-      const { data } = await todoAPI.patchTodo({
-        id: props.todoItem.id,
-        payLoad,
-      });
-      if (string === "isFinished") {
-        isFinished.value = data[string];
-      } else {
-        isImportant.value = data[string];
-      }
+    const store = useStore();
+    const toggleState = (id, property, value) => {
+      store.dispatch("toggleState", { id, property, value });
     };
-
-    watch(
-      () => props.todoItem,
-      (newValue, oldValue) => {
-        isFinished.value = newValue.isFinished;
-        isImportant.value = newValue.isImportant;
-      }
-    );
 
     return {
       props,
-      isFinished,
-      isImportant,
       toggleState,
     };
   },

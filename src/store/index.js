@@ -1,28 +1,65 @@
-import { ref, readonly } from "vue"
+import { createStore } from "vuex";
 import todoAPI from "../apis/todo-items"
 
-const isImportant = ref(false)
-const todoId = ref('1')
-const setTodoId = (id) => {
-  todoId.value = id
-}
-const fetchIsImportant = async (id) => {
-  try {
-    const res = await todoAPI.getTodo({ id })
-
-    if (res.statusText !== "OK") {
-      throw new Error(res.statusText)
+const store = createStore({
+  state: {
+    todoItems: [],
+    focusedTodoItem: {}
+  },
+  getters: {},
+  mutations: {
+    setTodoItems(state, payLoad) {
+      state.todoItems = payLoad;
+    },
+    setFocusedTodoItem(state, payLoad) {
+      state.focusedTodoItem = payLoad
     }
-    isImportant.value = res.data.isImportant
-    console.log(id)
-  } catch (error) {
-    console.log(error)
+  },
+  actions: {
+    fetchTodoItems: async ({ commit }) => {
+      try {
+        const { data, statusText } = await todoAPI.getTodos();
+
+        if (statusText !== "OK") {
+          throw new Error(statusText);
+        }
+
+        commit('setTodoItems', data)
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    fetchFocusedTodoItem: async ({ commit }, id) => {
+      try {
+        const { data, statusText } = await todoAPI.getTodo({ id });
+
+        if (statusText !== "OK") {
+          throw new Error(statusText);
+        }
+
+        commit('setFocusedTodoItem', data)
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    toggleState: async ({ dispatch }, { id, property, value }) => {
+      try {
+        const payLoad = { [property]: !value };
+        const { statusText } = await todoAPI.patchTodo({
+          id, payLoad
+        })
+
+        if (statusText !== "OK") {
+          throw new Error(statusText);
+        }
+
+        dispatch('fetchFocusedTodoItem', id)
+        dispatch('fetchTodoItems')
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
-}
-const toggleIsImportant = () => {
-  isImportant.value = !isImportant.value
-}
+})
 
-fetchIsImportant(todoId.value)
-
-export default { isImportant: readonly(isImportant), setTodoId, toggleIsImportant }
+export default store

@@ -5,49 +5,34 @@
     <main>
       <div @click="handleToDoItemClickedOnContainer" class="to-do-items">
         <TodoItem
-          v-for="todoItem in todoItems"
+          v-for="todoItem in $store.state.todoItems"
           :key="todoItem.id"
           :todoItem="todoItem"
         />
       </div>
     </main>
   </div>
+  <div></div>
 </template>
 
 <script>
-import { ref } from "vue";
 import TodoItem from "./TodoItem";
-import todoAPI from "../apis/todo-items";
+import { useStore } from "vuex";
 
 export default {
   name: "TodoItemsContainer",
   components: { TodoItem },
   emits: ["afterToDoItemClicked"],
-  async setup(props, { emit }) {
+  setup(props, { emit }) {
+    const store = useStore();
     const handleToDoItemClickedOnContainer = (e) => {
       if (e.target.tagName === "P") {
         emit("afterToDoItemClicked", e.target.id);
+        store.dispatch("fetchFocusedTodoItem", e.target.id);
       }
     };
 
-    const todoItems = ref({});
-    const isLoading = ref(true);
-
-    try {
-      const { data, statusText } = await todoAPI.getTodos();
-
-      if (statusText !== "OK") {
-        throw new Error(statusText);
-      }
-
-      todoItems.value = data;
-      isLoading.value = false;
-    } catch (error) {
-      isLoading.value = true;
-      console.log(error);
-    }
-
-    return { props, handleToDoItemClickedOnContainer, todoItems, isLoading };
+    return { props, handleToDoItemClickedOnContainer };
   },
 };
 </script>

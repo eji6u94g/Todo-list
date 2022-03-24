@@ -14,8 +14,9 @@
 
     <Suspense>
       <template #default>
-        <Modal :isModalShow="isModalShow" :ItemIdOfModal="ItemIdOfModal" />
+        <Modal :isModalShow="isModalShow" />
       </template>
+
       <template #fallback>
         <p>Loading...</p>
       </template>
@@ -28,23 +29,24 @@ import Navbar from "./components/Navbar.vue";
 import TodoItemsContainer from "./components/TodoItemsContainer.vue";
 import Modal from "./components/Modal.vue";
 import { ref } from "vue";
+import { useStore } from "vuex";
 
 export default {
   name: "App",
   components: { Navbar, Modal, TodoItemsContainer },
   setup() {
+    const store = useStore();
+    store.dispatch("fetchTodoItems");
+
     const isModalShow = ref(false);
-    const ItemIdOfModal = ref("");
 
     const afterToDoItemClicked = (id) => {
       isModalShow.value = !isModalShow.value;
-      ItemIdOfModal.value = id;
     };
 
     return {
       isModalShow,
       afterToDoItemClicked,
-      ItemIdOfModal,
     };
   },
 };
