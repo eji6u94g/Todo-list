@@ -4,7 +4,8 @@ import todoAPI from "../apis/todo-items"
 const store = createStore({
   state: {
     todoItems: [],
-    focusedTodoItem: {}
+    focusedTodoItem: {},
+    isModalShow: false
   },
   getters: {},
   mutations: {
@@ -13,6 +14,9 @@ const store = createStore({
     },
     setFocusedTodoItem(state, payLoad) {
       state.focusedTodoItem = payLoad
+    },
+    toggleIsModalShow(state) {
+      state.isModalShow = !state.isModalShow
     }
   },
   actions: {
@@ -44,21 +48,25 @@ const store = createStore({
     },
     toggleState: async ({ dispatch }, { id, property, value }) => {
       try {
-        const payLoad = { [property]: !value };
-        const { statusText } = await todoAPI.patchTodo({
+        let payLoad = {}
+        if (property === 'dueDate') {
+          payLoad = { [property]: value };
+        } else {
+          payLoad = { [property]: !value };
+        }
+        const { data, statusText } = await todoAPI.patchTodo({
           id, payLoad
         })
 
         if (statusText !== "OK") {
           throw new Error(statusText);
         }
-
         dispatch('fetchFocusedTodoItem', id)
         dispatch('fetchTodoItems')
       } catch (error) {
         console.log(error);
       }
-    }
+    },
   }
 })
 

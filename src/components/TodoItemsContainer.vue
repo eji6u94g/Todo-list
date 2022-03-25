@@ -23,12 +23,12 @@ export default {
   name: "TodoItemsContainer",
   components: { TodoItem },
   emits: ["afterToDoItemClicked"],
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
     const handleToDoItemClickedOnContainer = (e) => {
       if (e.target.tagName === "P") {
-        emit("afterToDoItemClicked", e.target.id);
         store.dispatch("fetchFocusedTodoItem", e.target.id);
+        store.commit("toggleIsModalShow");
       }
     };
 

@@ -4,7 +4,7 @@
 
     <Suspense>
       <template #default>
-        <TodoItemsContainer @afterToDoItemClicked="afterToDoItemClicked" />
+        <TodoItemsContainer />
       </template>
 
       <template #fallback>
@@ -14,7 +14,7 @@
 
     <Suspense>
       <template #default>
-        <Modal :isModalShow="isModalShow" />
+        <Modal/>
       </template>
 
       <template #fallback>
@@ -28,7 +28,6 @@
 import Navbar from "./components/Navbar.vue";
 import TodoItemsContainer from "./components/TodoItemsContainer.vue";
 import Modal from "./components/Modal.vue";
-import { ref } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -37,16 +36,8 @@ export default {
   setup() {
     const store = useStore();
     store.dispatch("fetchTodoItems");
-
-    const isModalShow = ref(false);
-
-    const afterToDoItemClicked = (id) => {
-      isModalShow.value = !isModalShow.value;
-    };
-
+    
     return {
-      isModalShow,
-      afterToDoItemClicked,
     };
   },
 };

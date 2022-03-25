@@ -4,23 +4,22 @@
       "id": "1",
       "title": "買電動牙刷",
       "isFinished": true,
-      "isAddedToToday": true,
-      "isImportant": false,
+      "isAddedToToday": false,
+      "isImportant": true,
       "isHavingDueDate": false,
       "category": "雜項",
-      "dueDate": null,
-      "string": true,
-      "undefined": true
+      "dueDate": "2022-03-23",
+      "string": true
     },
     {
       "id": "2",
       "title": "買衛生紙",
       "isFinished": true,
-      "isAddedToToday": true,
-      "isImportant": true,
+      "isAddedToToday": false,
+      "isImportant": false,
       "isHavingDueDate": false,
       "category": "雜項",
-      "dueDate": null,
+      "dueDate": "2022-03-29",
       "string": false
     }
   ]

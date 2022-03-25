@@ -1,9 +1,9 @@
 <template>
   <nav>
-    <div class="user-name">
+    <!-- <div class="user-name">
       <img src="" alt="avator" />
       <span>user-name</span>
-    </div>
+    </div> -->
 
     <div class="query-by-keyword d-flex align-items-center">
       <input type="search" placeholder="搜尋" results />
@@ -42,6 +42,7 @@ div.user-name {
 }
 div.query-by-keyword {
   margin: 0;
+  margin-top: 2rem;
   padding-left: 1rem;
   padding-right: 1rem;
   input {

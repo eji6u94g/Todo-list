@@ -1,40 +1,70 @@
 <template>
-  <div :class="['modal-container', { 'd-none': !props.isModalShow }]">
+  <div :class="['modal-container', { 'd-none': !$store.state.isModalShow }]">
     <TodoItem :todoItem="$store.state.focusedTodoItem" />
 
     <span class="split-line"></span>
 
     <div class="d-flex flex-column mb-4 mt-4">
-      <button><i class="fa-solid fa-sun"></i>新增到我的一天</button>
-      <button>
-        <label for="date"
-          ><i class="fa-solid fa-calendar"></i>新增到期日:</label
-        >
+      <button
+        @click="
+          toggleState(
+            $store.state.focusedTodoItem.id,
+            'isAddedToToday',
+            $store.state.focusedTodoItem.isAddedToToday
+          )
+        "
+        :class="[
+          { 'added-to-today': $store.state.focusedTodoItem.isAddedToToday },
+        ]"
+      >
+        <i class="fa-solid fa-sun"></i>{{ isAddedToToday }}
       </button>
-      <input type="date" id="date" />
-    </div>
 
-    <div class="d-flex justify-content-center">
-      <button>儲存</button>
-      <button>取消</button>
+      <label for="date"><i class="fa-solid fa-calendar"></i>到期日:</label>
+      <input type="date" id="date" v-model="dueDate" />
+      <button
+        @click.prevent.stop="
+          toggleState($store.state.focusedTodoItem.id, 'dueDate', dueDate)
+        "
+        class="save-due-date"
+      >
+        儲存
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import TodoItem from "./TodoItem.vue";
+import { useStore } from "vuex";
+import { computed, ref, watch } from "@vue/runtime-core";
 
 export default {
   name: "Modal",
   components: { TodoItem },
-  props: {
-    isModalShow: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  setup(props) {
-    return { props };
+  setup() {
+    const store = useStore();
+
+    const toggleState = (id, property, value) => {
+      store.dispatch("toggleState", { id, property, value });
+    };
+    const isAddedToToday = computed(() => {
+      if (store.state.focusedTodoItem.isAddedToToday) {
+        return "已新增到我的一天";
+      }
+      return "新增到我的一天";
+    });
+
+    const dueDate = ref();
+
+    watch(
+      () => store.state.focusedTodoItem,
+      (newValue, oldValue) => {
+        dueDate.value = store.state.focusedTodoItem.dueDate;
+      }
+    );
+
+    return { toggleState, isAddedToToday, dueDate };
   },
 };
 </script>
@@ -58,11 +88,31 @@ button {
   &:hover {
     @include hover-effect();
   }
+  &.added-to-today {
+    color: #6c81f7;
+  }
+  &.save-due-date {
+    text-align: center;
+  }
+}
+
+label[for="date"] {
+  width: 100%;
+  font-size: 0.8rem;
+  border: 0;
+  background-color: none;
+  background: none;
+  outline: none;
+  color: white;
+  text-align: start;
+  padding: 0.5rem 1rem;
+  svg {
+    padding-right: 1rem;
+  }
 }
 
 input[type="date"] {
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin: 0.5rem 1rem;
 }
 
 span.split-line {
