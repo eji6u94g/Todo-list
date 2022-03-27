@@ -1,5 +1,8 @@
 import { createStore } from "vuex";
 import todoAPI from "../apis/todo-items"
+import { useToast } from "vue-toastification";
+
+const toast = useToast()
 
 const store = createStore({
   state: {
@@ -30,6 +33,7 @@ const store = createStore({
 
         commit('setTodoItems', data)
       } catch (error) {
+        toast.error("沒辦法讀取Todo List, 請稍後再試", { timeout: 3000 })
         console.log(error);
       }
     },
@@ -43,18 +47,20 @@ const store = createStore({
 
         commit('setFocusedTodoItem', data)
       } catch (error) {
+        toast.error("沒辦法讀取Todo item, 請稍後再試", { timeout: 3000 })
         console.log(error);
       }
     },
     toggleState: async ({ dispatch }, { id, property, value }) => {
       try {
         let payLoad = {}
+
         if (property === 'dueDate') {
           payLoad = { [property]: value };
         } else {
           payLoad = { [property]: !value };
         }
-        const { data, statusText } = await todoAPI.patchTodo({
+        const { statusText } = await todoAPI.patchTodo({
           id, payLoad
         })
 
@@ -63,10 +69,29 @@ const store = createStore({
         }
         dispatch('fetchFocusedTodoItem', id)
         dispatch('fetchTodoItems')
+
+        if (property === "dueDate") toast.success('到期日成功儲存!')
+
       } catch (error) {
+        if (property === "dueDate") toast.error("發生錯誤, 請稍後再試", { timeout: 3000 })
         console.log(error);
       }
     },
+    createTodoItem: async ({ dispatch }, payLoad) => {
+      try {
+        const { statusText } = await todoAPI.createTodo({ payLoad })
+
+        if (statusText !== "Created") {
+          throw new Error(statusText);
+        }
+
+        dispatch('fetchTodoItems')
+
+      } catch (error) {
+        toast.error("發生錯誤, 無法新增Todo, 請稍後再試", { timeout: 3000 })
+        console.log(error);
+      }
+    }
   }
 })
 

@@ -7,6 +7,7 @@
         :id="props.todoItem.id"
         v-model="props.todoItem.isFinished"
       />
+
       <label
         :for="props.todoItem.id"
         @click="
@@ -17,6 +18,7 @@
           )
         "
       ></label>
+
       <p :id="props.todoItem.id">{{ props.todoItem.title }}</p>
     </div>
 
@@ -91,10 +93,7 @@ export default {
       flex-grow: 1;
     }
     &.important-icon {
-      height: 40px;
-      width: 40px;
-      text-align: center;
-      padding-top: 1rem;
+      @include common-icon();
     }
   }
   input {
@@ -128,10 +127,11 @@ export default {
     background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%2359A193%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20fill%3D%22%233EA390%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22%2F%3E%3C%2Fsvg%3E");
   }
   p {
-    padding-left: 3.5rem;
+    padding-left: 3rem;
     height: 40px;
     margin: 0 0;
     padding-top: 1rem;
+    font-size: 1rem;
   }
   svg:hover {
     filter: invert(0.3);

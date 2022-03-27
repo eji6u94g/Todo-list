@@ -1,9 +1,8 @@
 <template>
-  <div class="to-do-items-container d-flex flex-column">
-    <h1>To do List</h1>
-
+  <div class="to-do-items-container d-flex flex-column justify-content-between">
     <main>
-      <div @click="handleToDoItemClickedOnContainer" class="to-do-items">
+      <h1>To do List</h1>
+      <div @click="handleToDoItemClickedOnContainer">
         <TodoItem
           v-for="todoItem in $store.state.todoItems"
           :key="todoItem.id"
@@ -11,17 +10,18 @@
         />
       </div>
     </main>
+    <CreateTodoItem />
   </div>
-  <div></div>
 </template>
 
 <script>
 import TodoItem from "./TodoItem";
+import CreateTodoItem from "./CreateTodoItem.vue";
 import { useStore } from "vuex";
 
 export default {
   name: "TodoItemsContainer",
-  components: { TodoItem },
+  components: { TodoItem, CreateTodoItem },
   emits: ["afterToDoItemClicked"],
   setup(props) {
     const store = useStore();

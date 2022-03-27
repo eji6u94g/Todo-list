@@ -9,5 +9,8 @@ export default {
   },
   patchTodo({ id, payLoad }) {
     return apiHelper.patch(`/${id}`, payLoad)
+  },
+  createTodo({ payLoad }) {
+    return apiHelper.post('', payLoad)
   }
 }
