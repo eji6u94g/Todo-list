@@ -8,9 +8,22 @@ const store = createStore({
   state: {
     todoItems: [],
     focusedTodoItem: {},
-    isModalShow: false
+    isModalShow: false,
+    filter: '',
+    searchKeyword: ''
   },
-  getters: {},
+  getters: {
+    filterTodoItems(state) {
+      if (state.filter === 'all' || state.filter === '') {
+        return state.todoItems
+      } else {
+        return state.todoItems.filter(todoItem => todoItem[state.filter])
+      }
+    },
+    searchTodoItems(state) {
+      getters.filterTodoItems
+    }
+  },
   mutations: {
     setTodoItems(state, payLoad) {
       state.todoItems = payLoad;
@@ -20,6 +33,9 @@ const store = createStore({
     },
     toggleIsModalShow(state) {
       state.isModalShow = !state.isModalShow
+    },
+    setFilter(state, keyword) {
+      state.filter = keyword
     }
   },
   actions: {

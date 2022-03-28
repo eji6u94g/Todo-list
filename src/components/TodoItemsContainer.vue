@@ -4,7 +4,7 @@
       <h1>To do List</h1>
       <div @click="handleToDoItemClickedOnContainer">
         <TodoItem
-          v-for="todoItem in $store.state.todoItems"
+          v-for="todoItem in $store.getters.filterTodoItems"
           :key="todoItem.id"
           :todoItem="todoItem"
         />

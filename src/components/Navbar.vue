@@ -1,33 +1,45 @@
 <template>
   <nav>
-    <!-- <div class="user-name">
-      <img src="" alt="avator" />
-      <span>user-name</span>
-    </div> -->
-
     <div class="query-by-keyword d-flex align-items-center">
       <input type="search" placeholder="搜尋" results />
       <i class="fa-solid fa-magnifying-glass"></i>
     </div>
 
     <div class="query-by-options d-flex flex-column">
-      <button><i class="fa-solid fa-sun"></i>我的一天</button>
-      <button><i class="fa-solid fa-star"></i>重要</button>
-      <button><i class="fa-solid fa-calendar"></i>已計劃</button>
-      <button><i class="fa-solid fa-house"></i>全部</button>
+      <button @click="setFilter('isAddedToToday')">
+        <i class="fa-solid fa-sun"></i>我的一天
+      </button>
+      <button @click="setFilter('isImportant')">
+        <i class="fa-solid fa-star"></i>重要
+      </button>
+      <button @click="setFilter('isHavingDueDate')">
+        <i class="fa-solid fa-calendar"></i>已計劃
+      </button>
+      <button @click="setFilter('isFinished')">
+        <i class="fa-solid fa-calendar"></i>已完成
+      </button>
+      <button @click="setFilter('all')">
+        <i class="fa-solid fa-house"></i>全部
+      </button>
     </div>
 
     <span class="split-line"></span>
-
-    <div class="query-by-type d-flex flex-column">
-      <button><i class="fa-solid fa-bars"></i>分類1</button>
-    </div>
   </nav>
 </template>
 
 <script>
+import { useStore } from "vuex";
+
 export default {
   name: "Navbar",
+  setup() {
+    const store = useStore();
+    const setFilter = (keyword) => {
+      store.commit("setFilter", keyword);
+    };
+
+    return { setFilter };
+  },
 };
 </script>
 

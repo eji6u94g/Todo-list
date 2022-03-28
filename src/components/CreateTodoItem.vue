@@ -46,7 +46,6 @@ export default {
           isAddedToToday: false,
           isImportant: false,
           isHavingDueDate: false,
-          category: "雜項",
           dueDate: null,
         };
         store.dispatch("createTodoItem", payLoad);
