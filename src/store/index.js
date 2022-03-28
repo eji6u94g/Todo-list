@@ -10,18 +10,18 @@ const store = createStore({
     focusedTodoItem: {},
     isModalShow: false,
     filter: '',
-    searchKeyword: ''
+    keyword: ''
   },
   getters: {
     filterTodoItems(state) {
+      const todoItems = state.todoItems.filter(item =>
+        item.title.replace(/\s+/g, "").toLowerCase().includes(state.keyword))
+
       if (state.filter === 'all' || state.filter === '') {
-        return state.todoItems
+        return todoItems
       } else {
-        return state.todoItems.filter(todoItem => todoItem[state.filter])
+        return todoItems.filter(todoItem => todoItem[state.filter])
       }
-    },
-    searchTodoItems(state) {
-      getters.filterTodoItems
     }
   },
   mutations: {
@@ -34,8 +34,11 @@ const store = createStore({
     toggleIsModalShow(state) {
       state.isModalShow = !state.isModalShow
     },
-    setFilter(state, keyword) {
-      state.filter = keyword
+    setFilter(state, value) {
+      state.filter = value
+    },
+    setKeyword(state, value) {
+      state.keyword = value.replace(/\s+/g, "").toLowerCase()
     }
   },
   actions: {
@@ -72,7 +75,7 @@ const store = createStore({
         let payLoad = {}
 
         if (property === 'dueDate') {
-          payLoad = { [property]: value };
+          payLoad = { [property]: value, isHavingDueDate: true };
         } else {
           payLoad = { [property]: !value };
         }
@@ -83,6 +86,7 @@ const store = createStore({
         if (statusText !== "OK") {
           throw new Error(statusText);
         }
+
         dispatch('fetchFocusedTodoItem', id)
         dispatch('fetchTodoItems')
 

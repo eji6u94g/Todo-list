@@ -1,8 +1,7 @@
 <template>
   <nav>
     <div class="query-by-keyword d-flex align-items-center">
-      <input type="search" placeholder="搜尋" results />
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <input v-model="keyword" type="search" placeholder="搜尋" />
     </div>
 
     <div class="query-by-options d-flex flex-column">
@@ -29,6 +28,7 @@
 
 <script>
 import { useStore } from "vuex";
+import { computed } from "vue";
 
 export default {
   name: "Navbar",
@@ -37,8 +37,16 @@ export default {
     const setFilter = (keyword) => {
       store.commit("setFilter", keyword);
     };
+    const keyword = computed({
+      get() {
+        return store.state.keyword;
+      },
+      set(value) {
+        store.commit("setKeyword", value);
+      },
+    });
 
-    return { setFilter };
+    return { setFilter, keyword };
   },
 };
 </script>
