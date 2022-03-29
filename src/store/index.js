@@ -39,6 +39,9 @@ const store = createStore({
     },
     setKeyword(state, value) {
       state.keyword = value.replace(/\s+/g, "").toLowerCase()
+    },
+    closeModal(state) {
+      state.isModalShow = false
     }
   },
   actions: {
@@ -75,10 +78,13 @@ const store = createStore({
         let payLoad = {}
 
         if (property === 'dueDate') {
-          payLoad = { [property]: value, isHavingDueDate: true };
+          if (value !== null) {
+            payLoad = { [property]: value, isHavingDueDate: true };
+          }
         } else {
           payLoad = { [property]: !value };
         }
+
         const { statusText } = await todoAPI.patchTodo({
           id, payLoad
         })

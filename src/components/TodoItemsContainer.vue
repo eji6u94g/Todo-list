@@ -27,8 +27,12 @@ export default {
     const store = useStore();
     const handleToDoItemClickedOnContainer = (e) => {
       if (e.target.tagName === "P") {
-        store.dispatch("fetchFocusedTodoItem", e.target.id);
-        store.commit("toggleIsModalShow");
+        if (!store.state.isModalShow) {
+          store.dispatch("fetchFocusedTodoItem", e.target.id);
+          store.commit("toggleIsModalShow");
+        } else {
+          store.dispatch("fetchFocusedTodoItem", e.target.id);
+        }
       }
     };
 

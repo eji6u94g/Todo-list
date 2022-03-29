@@ -1,5 +1,8 @@
 <template>
-  <div :class="['modal-container', { 'd-none': !$store.state.isModalShow }]">
+  <div
+    :class="['modal-container', { 'd-none': !$store.state.isModalShow }]"
+    id="modal"
+  >
     <TodoItem :todoItem="$store.state.focusedTodoItem" />
 
     <span class="split-line"></span>
@@ -30,6 +33,9 @@
       >
         儲存
       </button>
+      <button @click.stop.prevent="toggleIsModalShow" class="save-due-date">
+        關閉
+      </button>
     </div>
   </div>
 </template>
@@ -38,12 +44,15 @@
 import TodoItem from "./TodoItem.vue";
 import { useStore } from "vuex";
 import { computed, ref, watch } from "@vue/runtime-core";
+import { useToast } from "vue-toastification";
 
 export default {
   name: "Modal",
   components: { TodoItem },
   setup() {
     const store = useStore();
+    const dueDate = ref();
+    const modal = document.querySelector("#modal");
 
     const toggleState = (id, property, value) => {
       store.dispatch("toggleState", { id, property, value });
@@ -54,8 +63,9 @@ export default {
       }
       return "新增到我的一天";
     });
-
-    const dueDate = ref();
+    const toggleIsModalShow = () => {
+      store.commit("toggleIsModalShow");
+    };
 
     watch(
       () => store.state.focusedTodoItem,
@@ -64,7 +74,7 @@ export default {
       }
     );
 
-    return { toggleState, isAddedToToday, dueDate };
+    return { toggleState, isAddedToToday, toggleIsModalShow, dueDate, modal };
   },
 };
 </script>

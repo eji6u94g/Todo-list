@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div @click="closeModal" class="container">
     <Navbar />
 
     <Suspense>
@@ -14,7 +14,7 @@
 
     <Suspense>
       <template #default>
-        <Modal/>
+        <Modal />
       </template>
 
       <template #fallback>
@@ -36,9 +36,18 @@ export default {
   setup() {
     const store = useStore();
     store.dispatch("fetchTodoItems");
-    
-    return {
+
+    const closeModal = (e) => {
+      if (
+        !modal.contains(e.target) &&
+        e.target.tagName !== "P" &&
+        store.state.isModalShow
+      ) {
+        store.commit("closeModal");
+      }
     };
+
+    return { closeModal };
   },
 };
 </script>

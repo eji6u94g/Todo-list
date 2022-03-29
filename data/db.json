@@ -48,7 +48,7 @@
     {
       "id": "c9764e11-2df7-48be-ad5b-4699fc34912e",
       "title": "我喜歡聽音樂",
-      "isFinished": false,
+      "isFinished": true,
       "isAddedToToday": false,
       "isImportant": false,
       "isHavingDueDate": false,
