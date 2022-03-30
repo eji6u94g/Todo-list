@@ -94,3 +94,30 @@ body {
 .align-items-center {
   align-items: center;
 }
+
+///// RWD setting
+@media  screen and (max-width: 768px) {
+  .container{
+    flex-direction: column;
+    position: relative;
+    .mobile-outter-hamburger, .mobile-inner-hamburger{
+      display: block;
+    }
+    nav {
+      display: none;
+      position: absolute;
+      z-index: 100;
+    }
+  }
+}
+
+@media screen and (max-width: 576px){
+  .container {
+    nav{
+      width: 100vw;
+    }
+    #modal{
+      width: 100vw;
+    }
+  }
+}

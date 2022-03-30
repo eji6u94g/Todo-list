@@ -44,7 +44,6 @@
 import TodoItem from "./TodoItem.vue";
 import { useStore } from "vuex";
 import { computed, ref, watch } from "@vue/runtime-core";
-import { useToast } from "vue-toastification";
 
 export default {
   name: "Modal",

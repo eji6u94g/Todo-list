@@ -1,5 +1,16 @@
 <template>
-  <nav>
+  <div class="mobile-outter-hamburger">
+    <div @click="toggleNavbar">
+      <i class="fa-solid fa-bars fa-2x"></i>
+    </div>
+  </div>
+  <nav id="nav">
+    <div class="mobile-inner-hamburger">
+      <div @click="toggleNavbar">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+    </div>
+
     <div class="query-by-keyword d-flex align-items-center">
       <input v-model="keyword" type="search" placeholder="搜尋" />
     </div>
@@ -34,6 +45,7 @@ export default {
   name: "Navbar",
   setup() {
     const store = useStore();
+
     const setFilter = (keyword) => {
       store.commit("setFilter", keyword);
     };
@@ -45,22 +57,48 @@ export default {
         store.commit("setKeyword", value);
       },
     });
+    const toggleNavbar = () => {
+      const nav = document.querySelector("nav");
+      if (nav.style.display === "") {
+        nav.style.display = "block";
+      } else if (nav.style.display === "block") {
+        nav.style.display = "";
+      }
+    };
 
-    return { setFilter, keyword };
+    return { setFilter, keyword, toggleNavbar };
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/mixins.scss";
+.mobile-outter-hamburger,
+.mobile-inner-hamburger {
+  display: none;
+  width: 100%;
+  height: 3rem;
+  position: relative;
+  svg {
+    position: absolute;
+    left: 2rem;
+    top: 1rem;
+  }
+}
 
 nav {
   @include navbar-style();
 }
-div.user-name {
+
+.mobile-inner-hamburger {
+  height: 1rem;
+}
+
+.user-name {
   padding: 0.75rem 1rem;
 }
-div.query-by-keyword {
+
+.query-by-keyword {
   margin: 0;
   margin-top: 2rem;
   padding-left: 1rem;
@@ -95,10 +133,12 @@ div.query-by-keyword {
     }
   }
 }
-div.query-by-options,
-div.query-by-type {
+
+.query-by-options,
+.query-by-type {
   margin: 0.5rem 0.5rem;
 }
+
 button {
   @include common-button();
   &:hover {
