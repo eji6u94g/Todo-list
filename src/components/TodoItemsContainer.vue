@@ -18,6 +18,7 @@
 import TodoItem from "./TodoItem";
 import CreateTodoItem from "./CreateTodoItem.vue";
 import { useStore } from "vuex";
+import { ref } from "vue";
 
 export default {
   name: "TodoItemsContainer",
@@ -25,18 +26,35 @@ export default {
   emits: ["afterToDoItemClicked"],
   setup(props) {
     const store = useStore();
+    const currentModalTodoItemId = ref();
+
     const handleToDoItemClickedOnContainer = (e) => {
       if (e.target.tagName === "P") {
         if (!store.state.isModalShow) {
           store.dispatch("fetchFocusedTodoItem", e.target.id);
           store.commit("toggleIsModalShow");
+          currentModalTodoItemId.value = e.target.id;
+          console.log(1);
         } else {
-          store.dispatch("fetchFocusedTodoItem", e.target.id);
+          if (e.target.id === currentModalTodoItemId.value) {
+            store.commit("toggleIsModalShow");
+            console.log(2);
+          } else {
+            store.dispatch("fetchFocusedTodoItem", e.target.id);
+            console.log("e.target.id: ", e.target.id);
+            console.log(
+              "currentModalTodoItemId: ",
+              currentModalTodoItemId.value
+            );
+            console.log(e.target.id === currentModalTodoItemId.value);
+            console.log(3);
+            currentModalTodoItemId.value = e.target.id;
+          }
         }
       }
     };
 
-    return { props, handleToDoItemClickedOnContainer };
+    return { props, handleToDoItemClickedOnContainer, currentModalTodoItemId };
   },
 };
 </script>

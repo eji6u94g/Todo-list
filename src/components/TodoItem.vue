@@ -19,7 +19,14 @@
         "
       ></label>
 
-      <p :id="props.todoItem.id">{{ props.todoItem.title }}</p>
+      <p @dblclick="editTodoItem" :id="props.todoItem.id">
+        {{ props.todoItem.title }}
+      </p>
+      <input type="text" :value="todoItemTitle" />
+    </div>
+
+    <div @click="deleteTodoItem(props.todoItem.id)" class="important-icon">
+      <i class="fa-solid fa-trash-can"></i>
     </div>
 
     <div
@@ -54,6 +61,7 @@
 
 <script>
 import { useStore } from "vuex";
+import { ref } from "vue";
 
 export default {
   name: "TodoItem",
@@ -65,13 +73,20 @@ export default {
   },
   setup(props) {
     const store = useStore();
+    const todoItemTitle = ref(props.todoItem.title);
+
     const toggleState = (id, property, value) => {
       store.dispatch("toggleState", { id, property, value });
+    };
+    const deleteTodoItem = (id) => {
+      store.dispatch("deleteTodoItem", id);
     };
 
     return {
       props,
       toggleState,
+      deleteTodoItem,
+      todoItemTitle,
     };
   },
 };
@@ -96,7 +111,7 @@ export default {
       @include common-icon();
     }
   }
-  input {
+  input[type="checkbox"] {
     text-align: center;
     position: absolute;
     top: 0;
@@ -132,6 +147,15 @@ export default {
     margin: 0 0;
     padding-top: 1rem;
     font-size: 1rem;
+  }
+  input[type="text"] {
+    @include common-input();
+    display: none;
+    position: absolute;
+    z-index: 2;
+    padding: 0 0;
+    top: 1rem;
+    left: 3rem;
   }
   svg:hover {
     filter: invert(0.3);

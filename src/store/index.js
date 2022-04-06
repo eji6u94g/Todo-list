@@ -117,6 +117,20 @@ const store = createStore({
         toast.error("發生錯誤, 無法新增Todo, 請稍後再試", { timeout: 3000 })
         console.log(error);
       }
+    },
+    deleteTodoItem: async ({ dispatch }, id) => {
+      try {
+        const { statusText } = await todoAPI.deleteTodo({ id });
+
+        if (statusText !== "OK") {
+          throw new Error(statusText);
+        }
+
+        dispatch('fetchTodoItems')
+      } catch (error) {
+        toast.error("沒辦法刪除Todo item, 請稍後再試", { timeout: 3000 })
+        console.log(error);
+      }
     }
   }
 })

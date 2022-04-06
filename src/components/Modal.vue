@@ -106,7 +106,7 @@ button {
 }
 
 label[for="date"] {
-  width: 100%;
+  // width: 100%;
   font-size: 0.8rem;
   border: 0;
   background-color: none;

@@ -88,14 +88,7 @@ export default {
   .create-input:focus {
     flex-grow: 1;
     input {
-      background-color: #242426;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      outline: 0;
-      border: 0;
-      color: white;
-      font-size: 1rem;
+      @include common-input();
     }
   }
 }

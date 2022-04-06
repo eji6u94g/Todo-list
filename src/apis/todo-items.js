@@ -12,5 +12,8 @@ export default {
   },
   createTodo({ payLoad }) {
     return apiHelper.post('', payLoad)
+  },
+  deleteTodo({ id }) {
+    return apiHelper.delete(`/${id}`)
   }
 }
