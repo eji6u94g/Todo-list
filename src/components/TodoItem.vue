@@ -27,6 +27,8 @@
     <input
       v-model="todoItemTitle"
       @keyup.enter="doneEdit(props.todoItem.id, 'title', todoItemTitle)"
+      @blur="doneEdit(props.todoItem.id, 'title', todoItemTitle)"
+      @keyup.esc="cancelEdit"
       :class="[{ editing: isEditing }]"
       type="text"
     />
@@ -109,6 +111,10 @@ export default {
       store.dispatch("editTodoItem", { id, property, value });
       isEditing.value = false;
     };
+    const cancelEdit = () => {
+      isEditing.value = false;
+      todoItemTitle.value = "";
+    };
 
     return {
       props,
@@ -116,6 +122,7 @@ export default {
       deleteTodoItem,
       editTodoItem,
       doneEdit,
+      cancelEdit,
       todoItemTitle,
       isEditing,
     };
