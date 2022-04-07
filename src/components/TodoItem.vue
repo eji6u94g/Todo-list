@@ -1,11 +1,11 @@
 <template>
   <div class="to-do-item d-flex align-items-center justify-content-between">
-    <div class="item">
+    <div :class="['item', { editing: isEditing }]">
       <input
-        type="checkbox"
-        class="toggle"
         :id="props.todoItem.id"
         v-model="props.todoItem.isFinished"
+        type="checkbox"
+        class="toggle"
       />
 
       <label
@@ -19,42 +19,61 @@
         "
       ></label>
 
-      <p @dblclick="editTodoItem" :id="props.todoItem.id">
+      <p :id="props.todoItem.id">
         {{ props.todoItem.title }}
       </p>
-      <input type="text" :value="todoItemTitle" />
     </div>
 
-    <div @click="deleteTodoItem(props.todoItem.id)" class="important-icon">
-      <i class="fa-solid fa-trash-can"></i>
-    </div>
-
-    <div
-      v-if="props.todoItem.isImportant"
-      @click="
-        toggleState(
-          props.todoItem.id,
-          'isImportant',
-          props.todoItem.isImportant
-        )
-      "
-      class="important-icon"
-    >
-      <i class="fa-solid fa-star"></i>
-    </div>
+    <input
+      v-model="todoItemTitle"
+      @keyup.enter="doneEdit(props.todoItem.id, 'title', todoItemTitle)"
+      :class="[{ editing: isEditing }]"
+      type="text"
+    />
 
     <div
-      v-else
-      @click="
-        toggleState(
-          props.todoItem.id,
-          'isImportant',
-          props.todoItem.isImportant
-        )
-      "
-      class="important-icon"
+      :class="[
+        'd-flex',
+        'align-items-center',
+        'justify-content-between',
+        { editing: isEditing },
+      ]"
     >
-      <i class="fa-regular fa-star"></i>
+      <div @click="editTodoItem(props.todoItem.title)" class="important-icon">
+        <i class="fa-solid fa-pen"></i>
+      </div>
+
+      <div @click="deleteTodoItem(props.todoItem.id)" class="important-icon">
+        <i class="fa-solid fa-trash-can"></i>
+      </div>
+
+      <div
+        v-if="props.todoItem.isImportant"
+        @click="
+          toggleState(
+            props.todoItem.id,
+            'isImportant',
+            props.todoItem.isImportant
+          )
+        "
+        class="important-icon"
+      >
+        <i class="fa-solid fa-star"></i>
+      </div>
+
+      <div
+        v-else
+        @click="
+          toggleState(
+            props.todoItem.id,
+            'isImportant',
+            props.todoItem.isImportant
+          )
+        "
+        class="important-icon"
+      >
+        <i class="fa-regular fa-star"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -73,7 +92,8 @@ export default {
   },
   setup(props) {
     const store = useStore();
-    const todoItemTitle = ref(props.todoItem.title);
+    const todoItemTitle = ref();
+    const isEditing = ref(false);
 
     const toggleState = (id, property, value) => {
       store.dispatch("toggleState", { id, property, value });
@@ -81,12 +101,23 @@ export default {
     const deleteTodoItem = (id) => {
       store.dispatch("deleteTodoItem", id);
     };
+    const editTodoItem = (title) => {
+      isEditing.value = true;
+      todoItemTitle.value = title;
+    };
+    const doneEdit = (id, property, value) => {
+      store.dispatch("editTodoItem", { id, property, value });
+      isEditing.value = false;
+    };
 
     return {
       props,
       toggleState,
       deleteTodoItem,
+      editTodoItem,
+      doneEdit,
       todoItemTitle,
+      isEditing,
     };
   },
 };
@@ -102,10 +133,14 @@ export default {
   padding-right: 1rem;
   border-radius: 0.5rem;
   margin-top: 0.3rem;
+  position: relative;
   div {
     &.item {
       position: relative;
       flex-grow: 1;
+    }
+    &.editing {
+      display: none;
     }
     &.important-icon {
       @include common-icon();
@@ -152,10 +187,13 @@ export default {
     @include common-input();
     display: none;
     position: absolute;
-    z-index: 2;
+    z-index: initial;
     padding: 0 0;
     top: 1rem;
     left: 3rem;
+    &.editing {
+      display: block;
+    }
   }
   svg:hover {
     filter: invert(0.3);

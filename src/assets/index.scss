@@ -108,6 +108,9 @@ body {
       position: absolute;
       z-index: 100;
     }
+    #modal{
+      width: 100vw;
+    }
   }
 }
 
@@ -116,8 +119,6 @@ body {
     nav{
       width: 100vw;
     }
-    #modal{
-      width: 100vw;
-    }
+    
   }
 }

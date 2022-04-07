@@ -27,7 +27,7 @@
       <input type="date" id="date" v-model="dueDate" />
       <button
         @click.prevent.stop="
-          toggleState($store.state.focusedTodoItem.id, 'dueDate', dueDate)
+          editTodoItem($store.state.focusedTodoItem.id, 'dueDate', dueDate)
         "
         class="save-due-date"
       >
@@ -56,6 +56,9 @@ export default {
     const toggleState = (id, property, value) => {
       store.dispatch("toggleState", { id, property, value });
     };
+    const editTodoItem = (id, property, value) => {
+      store.dispatch("editTodoItem", { id, property, value });
+    };
     const isAddedToToday = computed(() => {
       if (store.state.focusedTodoItem.isAddedToToday) {
         return "已新增到我的一天";
@@ -73,7 +76,14 @@ export default {
       }
     );
 
-    return { toggleState, isAddedToToday, toggleIsModalShow, dueDate, modal };
+    return {
+      toggleState,
+      isAddedToToday,
+      toggleIsModalShow,
+      dueDate,
+      modal,
+      editTodoItem,
+    };
   },
 };
 </script>
@@ -83,6 +93,7 @@ export default {
 
 .modal-container {
   @include navbar-style();
+  width: 25vw;
   h3 {
     padding-left: 1rem;
   }

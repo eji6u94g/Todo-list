@@ -75,15 +75,7 @@ const store = createStore({
     },
     toggleState: async ({ dispatch }, { id, property, value }) => {
       try {
-        let payLoad = {}
-
-        if (property === 'dueDate') {
-          if (value !== null) {
-            payLoad = { [property]: value, isHavingDueDate: true };
-          }
-        } else {
-          payLoad = { [property]: !value };
-        }
+        const payLoad = { [property]: !value };
 
         const { statusText } = await todoAPI.patchTodo({
           id, payLoad
@@ -95,8 +87,6 @@ const store = createStore({
 
         dispatch('fetchFocusedTodoItem', id)
         dispatch('fetchTodoItems')
-
-        if (property === "dueDate") toast.success('到期日成功儲存!')
 
       } catch (error) {
         if (property === "dueDate") toast.error("發生錯誤, 請稍後再試", { timeout: 3000 })
@@ -115,6 +105,36 @@ const store = createStore({
 
       } catch (error) {
         toast.error("發生錯誤, 無法新增Todo, 請稍後再試", { timeout: 3000 })
+        console.log(error);
+      }
+    },
+    editTodoItem: async ({ dispatch }, { id, property, value }) => {
+      try {
+        let payLoad = {}
+
+        if (property === 'dueDate') {
+          if (value !== null) {
+            payLoad = { [property]: value, isHavingDueDate: true };
+          }
+        } else {
+          payLoad = { [property]: value };
+        }
+
+        const { statusText } = await todoAPI.patchTodo({
+          id, payLoad
+        })
+
+        if (statusText !== "OK") {
+          throw new Error(statusText);
+        }
+
+        dispatch('fetchFocusedTodoItem', id)
+        dispatch('fetchTodoItems')
+
+        if (property === "dueDate") toast.success('到期日成功儲存!')
+
+      } catch (error) {
+        toast.error("發生錯誤, 請稍後再試", { timeout: 3000 })
         console.log(error);
       }
     },

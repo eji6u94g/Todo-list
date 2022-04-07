@@ -2,21 +2,12 @@
   "todoList": [
     {
       "id": "c9764e11-2df7-48be-ad5b-4699fc34912e",
-      "title": "我喜歡聽音樂",
+      "title": "我喜歡唱歌",
       "isFinished": true,
       "isAddedToToday": false,
       "isImportant": false,
-      "isHavingDueDate": false,
-      "dueDate": null
-    },
-    {
-      "id": "79e9e5f1-f2da-45b8-8b89-85673752e5ff",
-      "title": "123123",
-      "isFinished": false,
-      "isAddedToToday": false,
-      "isImportant": false,
-      "isHavingDueDate": false,
-      "dueDate": null
+      "isHavingDueDate": true,
+      "dueDate": "2022-04-20"
     }
   ]
 }
