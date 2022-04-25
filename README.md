@@ -1,12 +1,10 @@
 # To do List
 
-## Outline
-
 ### This front end project is made based on "Microsoft To Do" APP using Vue 3.
 
 <br>
 
-## Project setup
+# Project setup
 
 ### Step 1: Clone project
 
@@ -14,7 +12,7 @@
 git clone https://github.com/eji6u94g/Todo-list.git
 ```
 
-### Step 2: Install and run project
+### Step 2: Installation, run mock server and run project
 
 ```
 $ npm install
@@ -24,7 +22,7 @@ $ json-server --watch data/db.json
 
 <br>
 
-## Tools and skills used in To do List
+# Tools and skills used in To do List
 
 1.  CSS / SCSS
 2.  Vue 3
@@ -36,15 +34,15 @@ $ json-server --watch data/db.json
 
 <br>
 
-## Function
+# Function
 
-1.  Add / Delete / Edit / search todos
+- Add / Delete / Edit / search todos
     ![image](./src/assets/img/function_1.png)
-2.  Check todos
+- Check todos
     ![image](./src/assets/img/function_2.png)
-3.  Add todos to "Favorite"
-4.  Click todo and add todo to "Today"
-5.  Click todo and add "due date" to todo
+- Add todos to "Favorite"
+- Click todo and add todo to "Today" 
+- Click todo and add "due date" to todo
     ![image](./src/assets/img/function_345.png)
-6.  Display todos in different states by filters in navbar
+- Display todos in different states by filters in navbar
     ![image](./src/assets/img/function_6.png)
